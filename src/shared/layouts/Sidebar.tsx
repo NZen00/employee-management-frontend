@@ -1,4 +1,3 @@
-// src/shared/components/layouts/Sidebar.tsx
 import { NavLink } from 'react-router-dom';
 import { Building2, Users, LayoutDashboard } from 'lucide-react';
 import './Sidebar.scss';

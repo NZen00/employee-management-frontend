@@ -1,4 +1,3 @@
-// src/shared/utils/apiClient.ts
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7097/api';
@@ -11,7 +10,6 @@ export const apiClient = axios.create({
     },
 });
 
-// Request interceptor
 apiClient.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
         // Add auth token if exists
@@ -26,7 +24,6 @@ apiClient.interceptors.request.use(
     }
 );
 
-// Response interceptor
 apiClient.interceptors.response.use(
     (response: AxiosResponse) => {
         return response;

@@ -1,4 +1,3 @@
-// src/features/departments/pages/DepartmentsPage.tsx
 import { useState } from 'react';
 import { Container, Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
 import { Plus } from 'lucide-react';
@@ -40,7 +39,7 @@ const DepartmentsPage = () => {
         if (window.confirm('Are you sure you want to delete this department?')) {
             const success = await deleteDepartment(id);
             if (success) {
-                await fetchDepartments(currentPage, pageSize); // Refresh current page
+                await fetchDepartments(currentPage, pageSize);
             }
         }
     };
@@ -70,7 +69,7 @@ const DepartmentsPage = () => {
 
         if (success) {
             handleCloseModal();
-            await fetchDepartments(currentPage, pageSize); // Refresh current page
+            await fetchDepartments(currentPage, pageSize);
         }
     };
 

@@ -1,4 +1,3 @@
-// src/features/employees/hooks/useEmployees.ts
 import { useState, useEffect } from 'react';
 import employeeApi from '../services/employeeApi';
 import { Employee, CreateEmployeeDto, UpdateEmployeeDto } from '../types/employee.types';
@@ -46,20 +45,19 @@ export const useEmployees = () => {
             if (err.response?.data) {
                 const errorData = err.response.data;
 
-                // Format 1: {"":["error message"]}
                 if (errorData['']) {
                     errorMsg = Array.isArray(errorData['']) ? errorData[''][0] : errorData[''];
                 }
-                // Format 2: {errors: {...}}
+
                 else if (errorData.errors) {
                     const errorMessages = Object.values(errorData.errors).flat().join(', ');
                     errorMsg = errorMessages;
                 }
-                // Format 3: {Email: ["error"]}
+
                 else if (errorData.Email) {
                     errorMsg = Array.isArray(errorData.Email) ? errorData.Email[0] : errorData.Email;
                 }
-                // Format 4: {message: "error"}
+
                 else if (errorData.message) {
                     errorMsg = errorData.message;
                 }
@@ -92,20 +90,19 @@ export const useEmployees = () => {
             if (err.response?.data) {
                 const errorData = err.response.data;
 
-                // Format 1: {"":["error message"]}
                 if (errorData['']) {
                     errorMsg = Array.isArray(errorData['']) ? errorData[''][0] : errorData[''];
                 }
-                // Format 2: {errors: {...}}
+
                 else if (errorData.errors) {
                     const errorMessages = Object.values(errorData.errors).flat().join(', ');
                     errorMsg = errorMessages;
                 }
-                // Format 3: {Email: ["error"]}
+
                 else if (errorData.Email) {
                     errorMsg = Array.isArray(errorData.Email) ? errorData.Email[0] : errorData.Email;
                 }
-                // Format 4: {message: "error"}
+
                 else if (errorData.message) {
                     errorMsg = errorData.message;
                 }

@@ -1,4 +1,3 @@
-// src/shared/components/layouts/Navbar.tsx
 import { Bell, Search, User, Settings } from 'lucide-react';
 import { Dropdown } from 'react-bootstrap';
 import './Navbar.scss';

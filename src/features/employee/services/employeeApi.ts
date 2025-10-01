@@ -1,6 +1,5 @@
-// src/features/employees/services/employeeApi.ts
 import apiClient from '../../../app/api/apiClient';
-import { Employee, CreateEmployeeDto, UpdateEmployeeDto } from '../types/employee.types';
+import { Employee, CreateEmployeeDto, UpdateEmployeeDto, PagedResult } from '../types/employee.types';
 
 const EMPLOYEE_ENDPOINT = '/employees';
 

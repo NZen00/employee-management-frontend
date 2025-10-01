@@ -1,4 +1,3 @@
-// src/features/employees/components/EmployeeTable.tsx
 import { useState } from 'react';
 import { Table, Button, Pagination, Badge } from 'react-bootstrap';
 import { Pencil, Trash2, Mail } from 'lucide-react';

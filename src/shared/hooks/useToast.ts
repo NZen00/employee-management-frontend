@@ -1,4 +1,3 @@
-// src/shared/hooks/useToast.ts
 import { toast, ToastOptions } from 'react-toastify';
 
 export const useToast = () => {

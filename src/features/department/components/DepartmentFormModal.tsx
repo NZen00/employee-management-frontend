@@ -1,4 +1,3 @@
-// src/features/departments/components/DepartmentFormModal.tsx
 import { useEffect } from 'react';
 import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
@@ -50,7 +49,7 @@ const DepartmentFormModal = ({
         formState: { errors },
         reset,
         setValue,
-    } = useForm<FormData>({ // Change from CreateDepartmentDto
+    } = useForm<FormData>({
         resolver: yupResolver(schema),
     });
 

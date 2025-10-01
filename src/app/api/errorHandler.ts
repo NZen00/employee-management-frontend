@@ -1,4 +1,3 @@
-// src/shared/utils/errorHandler.ts
 import { AxiosError } from 'axios';
 import { ApiError } from './types/api.types';
 
@@ -11,7 +10,6 @@ export const handleApiError = (error: unknown): string => {
         }
 
         if (apiError?.errors) {
-            // Flatten validation errors
             const messages = Object.values(apiError.errors).flat();
             return messages.join(', ');
         }

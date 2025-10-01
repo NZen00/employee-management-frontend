@@ -1,4 +1,3 @@
-// src/features/departments/components/DepartmentTable.tsx
 import { useState } from 'react';
 import { Table, Button, Pagination } from 'react-bootstrap';
 import { Pencil, Trash2 } from 'lucide-react';

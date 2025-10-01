@@ -1,4 +1,3 @@
-// src/features/employees/types/employee.types.ts
 export interface Employee {
     employeeId: number;
     firstName: string;

@@ -1,4 +1,3 @@
-// src/features/employees/pages/EmployeesPage.tsx
 import { useState } from 'react';
 import { Container, Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
 import { Plus } from 'lucide-react';
@@ -49,7 +48,7 @@ const EmployeesPage = () => {
         if (window.confirm('Are you sure you want to delete this employee?')) {
             const success = await deleteEmployee(id);
             if (success) {
-                await fetchEmployees(currentPage, pageSize); // Refresh current page
+                await fetchEmployees(currentPage, pageSize);
             }
         }
     };
@@ -78,7 +77,7 @@ const EmployeesPage = () => {
 
         if (success) {
             handleCloseModal();
-            await fetchEmployees(currentPage, pageSize); // Refresh current page
+            await fetchEmployees(currentPage, pageSize);
         }
     };
 

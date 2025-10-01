@@ -1,4 +1,3 @@
-// src/features/departments/hooks/useDepartments.ts
 import { useState, useEffect } from 'react';
 import departmentApi from '../services/departmentApi';
 import { Department, CreateDepartmentDto, UpdateDepartmentDto } from '../types/department.types';
@@ -47,7 +46,6 @@ export const useDepartments = () => {
                 toast.error(errorMessages);
                 setError(errorMessages);
             } else if (err.response?.data?.DepartmentCode) {
-                // Handle specific format: {"DepartmentCode":["error msg"]}
                 const errorMsg = err.response.data.DepartmentCode[0];
                 toast.error(errorMsg);
                 setError(errorMsg);

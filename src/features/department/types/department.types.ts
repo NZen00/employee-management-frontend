@@ -1,4 +1,3 @@
-// src/features/departments/types/department.types.ts
 export interface Department {
     departmentId: number;
     departmentCode: string;

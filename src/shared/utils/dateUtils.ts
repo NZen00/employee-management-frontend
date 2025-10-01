@@ -1,4 +1,3 @@
-// src/shared/utils/dateUtils.ts
 export const formatDate = (dateString: string): string => {
     if (!dateString) return 'N/A';
 

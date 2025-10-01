@@ -1,11 +1,9 @@
-// src/features/employees/components/EmployeeFormModal.tsx
 import { useEffect } from 'react';
 import { Modal, Button, Form, Row, Col, Spinner } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Employee, CreateEmployeeDto } from '../types/employee.types';
-import { Department } from '../../department/types/department.types';
 import './EmployeeFormModal.scss';
 import { useDepartmentsLazy } from '../../department/hooks/useDepartmentsLazy';
 
@@ -101,7 +99,7 @@ const EmployeeFormModal = ({
 
     useEffect(() => {
         if (show && departments.length === 0) {
-            fetchDepartments(); // Call fetchDepartments from your hook
+            fetchDepartments();
         }
     }, [show, departments.length, fetchDepartments]);
 
