@@ -5,13 +5,11 @@ import { Plus } from 'lucide-react';
 import EmployeeTable from '../components/EmployeeTable';
 import EmployeeFormModal from '../components/EmployeeFormModal';
 import { useEmployees } from '../hooks/useEmployees';
-import { useDepartments } from '../../department/hooks/useDepartments';
 import { Employee, UpdateEmployeeDto } from '../types/employee.types';
 import './EmployeesPage.scss';
 
 const EmployeesPage = () => {
     const { employees, loading, error, createEmployee, updateEmployee, deleteEmployee, fetchEmployees } = useEmployees();
-    const { departments } = useDepartments();
     const [showModal, setShowModal] = useState(false);
     const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
 
@@ -122,7 +120,6 @@ const EmployeesPage = () => {
                 onHide={handleCloseModal}
                 onSubmit={handleSubmit}
                 employee={editingEmployee}
-                departments={departments}
                 loading={loading}
             />
         </Container>

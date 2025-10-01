@@ -7,13 +7,13 @@ import * as yup from 'yup';
 import { Employee, CreateEmployeeDto } from '../types/employee.types';
 import { Department } from '../../department/types/department.types';
 import './EmployeeFormModal.scss';
+import { useDepartmentsLazy } from '../../department/hooks/useDepartmentsLazy';
 
 interface EmployeeFormModalProps {
     show: boolean;
     onHide: () => void;
     onSubmit: (data: CreateEmployeeDto) => Promise<void>;
     employee: Employee | null;
-    departments: Department[];
     loading: boolean;
 }
 
@@ -71,9 +71,11 @@ const EmployeeFormModal = ({
                                onHide,
                                onSubmit,
                                employee,
-                               departments,
                                loading,
                            }: EmployeeFormModalProps) => {
+
+    const { departments, loading: departmentsLoading, error: departmentsError, fetchDepartments } = useDepartmentsLazy();
+
     const {
         register,
         handleSubmit,
@@ -96,6 +98,12 @@ const EmployeeFormModal = ({
             reset();
         }
     }, [employee, setValue, reset]);
+
+    useEffect(() => {
+        if (show && departments.length === 0) {
+            fetchDepartments(); // Call fetchDepartments from your hook
+        }
+    }, [show, departments.length, fetchDepartments]);
 
     const handleFormSubmit = async (data: CreateEmployeeDto) => {
         await onSubmit(data);
