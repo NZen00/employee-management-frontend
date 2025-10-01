@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MainLayout from './shared/layouts/MainLayout';
 import DepartmentsPage from './features/department/pages/DepartmentsPage';
+import EmployeesPage from './features/employee/pages/EmployeesPage.js';
 
 function App() {
     return (
@@ -12,7 +13,7 @@ function App() {
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<div>Dashboard</div>} />
                     <Route path="departments" element={<DepartmentsPage />} />
-                    <Route path="employees" element={<div>Employees Page</div>} />
+                    <Route path="employees" element={<EmployeesPage />} />
                 </Route>
             </Routes>
             <ToastContainer />
