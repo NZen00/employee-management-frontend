@@ -9,9 +9,24 @@ import { Employee, UpdateEmployeeDto } from '../types/employee.types';
 import './EmployeesPage.scss';
 
 const EmployeesPage = () => {
-    const { employees, loading, error, createEmployee, updateEmployee, deleteEmployee, fetchEmployees } = useEmployees();
+    const {
+        employees,
+        totalCount,
+        currentPage,
+        pageSize,
+        loading,
+        error,
+        fetchEmployees,
+        createEmployee,
+        updateEmployee,
+        deleteEmployee,
+    } = useEmployees();
     const [showModal, setShowModal] = useState(false);
     const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
+
+    const handlePageChange = (page: number, size: number) => {
+        fetchEmployees(page, size);
+    };
 
     const handleAdd = () => {
         setEditingEmployee(null);
@@ -23,22 +38,20 @@ const EmployeesPage = () => {
         setShowModal(true);
     };
 
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setEditingEmployee(null);
+    };
+
     const handleDelete = async (id: number) => {
-        if (!id || id === 0) {
-            return;
-        }
+        if (!id || id === 0) return;
 
         if (window.confirm('Are you sure you want to delete this employee?')) {
             const success = await deleteEmployee(id);
             if (success) {
-                await fetchEmployees();
+                await fetchEmployees(currentPage, pageSize); // Refresh current page
             }
         }
-    };
-
-    const handleCloseModal = () => {
-        setShowModal(false);
-        setEditingEmployee(null);
     };
 
     const handleSubmit = async (data: any) => {
@@ -65,7 +78,7 @@ const EmployeesPage = () => {
 
         if (success) {
             handleCloseModal();
-            await fetchEmployees();
+            await fetchEmployees(currentPage, pageSize); // Refresh current page
         }
     };
 
@@ -107,6 +120,10 @@ const EmployeesPage = () => {
                         ) : (
                             <EmployeeTable
                                 employees={employees}
+                                totalCount={totalCount}
+                                currentPage={currentPage}
+                                pageSize={pageSize}
+                                onPageChange={handlePageChange}
                                 onEdit={handleEdit}
                                 onDelete={handleDelete}
                             />

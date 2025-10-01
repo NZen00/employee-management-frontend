@@ -8,26 +8,31 @@ import './EmployeeTable.scss';
 
 interface EmployeeTableProps {
     employees: Employee[];
+    totalCount: number;
+    currentPage: number;
+    pageSize: number;
+    onPageChange: (page: number, pageSize: number) => void;
     onEdit: (employee: Employee) => void;
     onDelete: (id: number) => void;
 }
-
-const EmployeeTable = ({ employees, onEdit, onDelete }: EmployeeTableProps) => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-
-    const indexOfLastItem = currentPage * pageSize;
-    const indexOfFirstItem = indexOfLastItem - pageSize;
-    const currentItems = employees.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(employees.length / pageSize);
+const EmployeeTable = ({
+                           employees,
+                           totalCount,
+                           currentPage,
+                           pageSize,
+                           onPageChange,
+                           onEdit,
+                           onDelete
+                       }: EmployeeTableProps) => {
+    const totalPages = Math.ceil(totalCount / pageSize);
 
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
+        onPageChange(page, pageSize);
     };
 
     const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setPageSize(Number(e.target.value));
-        setCurrentPage(1);
+        const newSize = Number(e.target.value);
+        onPageChange(1, newSize);
     };
 
     const getPaginationItems = () => {
@@ -55,6 +60,9 @@ const EmployeeTable = ({ employees, onEdit, onDelete }: EmployeeTableProps) => {
         return items;
     };
 
+    const startIndex = (currentPage - 1) * pageSize + 1;
+    const endIndex = Math.min(currentPage * pageSize, totalCount);
+
     return (
         <div className="employee-table-wrapper">
             <div className="table-responsive">
@@ -71,14 +79,14 @@ const EmployeeTable = ({ employees, onEdit, onDelete }: EmployeeTableProps) => {
                     </tr>
                     </thead>
                     <tbody>
-                    {currentItems.length === 0 ? (
+                    {employees.length === 0 ? (
                         <tr>
                             <td colSpan={7} className="text-center py-5 text-muted">
                                 No employees found. Add your first employee!
                             </td>
                         </tr>
                     ) : (
-                        currentItems.map((employee) => (
+                        employees.map((employee) => (
                             <tr key={employee.employeeId}>
                                 <td>
                                     <div className="employee-name">
@@ -142,7 +150,7 @@ const EmployeeTable = ({ employees, onEdit, onDelete }: EmployeeTableProps) => {
                 </Table>
             </div>
 
-            {employees.length > 0 && (
+            {totalCount > 0 && (
                 <div className="table-footer">
                     <div className="page-size-selector">
                         <span className="me-2">Show</span>
@@ -160,8 +168,7 @@ const EmployeeTable = ({ employees, onEdit, onDelete }: EmployeeTableProps) => {
                     </div>
 
                     <div className="pagination-info">
-                        Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, employees.length)} of{' '}
-                        {employees.length} entries
+                        Showing {startIndex} to {endIndex} of {totalCount} entries
                     </div>
 
                     <Pagination className="mb-0">

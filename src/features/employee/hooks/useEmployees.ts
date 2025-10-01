@@ -6,16 +6,22 @@ import { useToast } from '../../../shared/hooks/useToast';
 
 export const useEmployees = () => {
     const [employees, setEmployees] = useState<Employee[]>([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const toast = useToast();
 
-    const fetchEmployees = async () => {
+    const fetchEmployees = async (page: number = 1, size: number = 10) => {
         try {
             setLoading(true);
             setError(null);
-            const data = await employeeApi.getAll();
-            setEmployees(data);
+            const data = await employeeApi.getPaged(page, size);
+            setEmployees(data.items);
+            setTotalCount(data.totalCount);
+            setCurrentPage(page);
+            setPageSize(size);
         } catch (err: any) {
             const errorMsg = err.response?.data?.message || 'Failed to fetch employees';
             setError(errorMsg);
@@ -132,11 +138,14 @@ export const useEmployees = () => {
     };
 
     useEffect(() => {
-        fetchEmployees();
+        fetchEmployees(currentPage, pageSize);
     }, []);
 
     return {
         employees,
+        totalCount,
+        currentPage,
+        pageSize,
         loading,
         error,
         fetchEmployees,

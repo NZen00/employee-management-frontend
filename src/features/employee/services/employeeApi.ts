@@ -10,6 +10,14 @@ export const employeeApi = {
         return response.data;
     },
 
+    getPaged: async (page: number, pageSize: number): Promise<PagedResult<Employee>> => {
+        const response = await apiClient.get<PagedResult<Employee>>(
+            `${EMPLOYEE_ENDPOINT}/paged`,
+            { params: { page, pageSize } }
+        );
+        return response.data;
+    },
+
     getById: async (id: number): Promise<Employee> => {
         const response = await apiClient.get<Employee>(`${EMPLOYEE_ENDPOINT}/${id}`);
         return response.data;
