@@ -6,16 +6,22 @@ import { useToast } from '../../../shared/hooks/useToast';
 
 export const useDepartments = () => {
     const [departments, setDepartments] = useState<Department[]>([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const toast = useToast();
 
-    const fetchDepartments = async () => {
+    const fetchDepartments = async (page: number = 1, size: number = 10) => {
         try {
             setLoading(true);
             setError(null);
-            const data = await departmentApi.getAll();
-            setDepartments(data);
+            const data = await departmentApi.getPaged(page, size);
+            setDepartments(data.items);
+            setTotalCount(data.totalCount);
+            setCurrentPage(page);
+            setPageSize(size);
         } catch (err: any) {
             const errorMsg = err.response?.data?.message || 'Failed to fetch departments';
             setError(errorMsg);
@@ -115,11 +121,14 @@ export const useDepartments = () => {
     };
 
     useEffect(() => {
-        fetchDepartments();
+        fetchDepartments(currentPage, pageSize);
     }, []);
 
     return {
         departments,
+        totalCount,
+        currentPage,
+        pageSize,
         loading,
         error,
         fetchDepartments,

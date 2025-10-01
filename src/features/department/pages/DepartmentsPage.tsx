@@ -9,7 +9,18 @@ import {Department, UpdateDepartmentDto} from '../types/department.types';
 import './DepartmentsPage.scss';
 
 const DepartmentsPage = () => {
-    const { departments, loading, error, createDepartment, updateDepartment, deleteDepartment, fetchDepartments } = useDepartments();
+    const {
+        departments,
+        totalCount,
+        currentPage,
+        pageSize,
+        loading,
+        error,
+        fetchDepartments,
+        createDepartment,
+        updateDepartment,
+        deleteDepartment,
+    } = useDepartments();
     const [showModal, setShowModal] = useState(false);
     const [editingDepartment, setEditingDepartment] = useState<Department | null>(null);
 
@@ -24,11 +35,12 @@ const DepartmentsPage = () => {
     };
 
     const handleDelete = async (id: number) => {
+        if (!id || id === 0) return;
 
         if (window.confirm('Are you sure you want to delete this department?')) {
             const success = await deleteDepartment(id);
             if (success) {
-                await fetchDepartments();
+                await fetchDepartments(currentPage, pageSize); // Refresh current page
             }
         }
     };
@@ -36,6 +48,10 @@ const DepartmentsPage = () => {
     const handleCloseModal = () => {
         setShowModal(false);
         setEditingDepartment(null);
+    };
+
+    const handlePageChange = (page: number, size: number) => {
+        fetchDepartments(page, size);
     };
 
     const handleSubmit = async (data: any) => {
@@ -54,7 +70,7 @@ const DepartmentsPage = () => {
 
         if (success) {
             handleCloseModal();
-            await fetchDepartments();
+            await fetchDepartments(currentPage, pageSize); // Refresh current page
         }
     };
 
@@ -91,11 +107,14 @@ const DepartmentsPage = () => {
                         {loading && departments.length === 0 ? (
                             <div className="text-center py-5">
                                 <Spinner animation="border" variant="primary" />
-                                <p className="mt-3 text-muted">Loading departments...</p>
                             </div>
                         ) : (
                             <DepartmentTable
                                 departments={departments}
+                                totalCount={totalCount}
+                                currentPage={currentPage}
+                                pageSize={pageSize}
+                                onPageChange={handlePageChange}
                                 onEdit={handleEdit}
                                 onDelete={handleDelete}
                             />

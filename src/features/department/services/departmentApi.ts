@@ -11,6 +11,14 @@ export const departmentApi = {
         return response.data;
     },
 
+    getPaged: async (page: number, pageSize: number): Promise<PagedResult<Department>> => {
+        const response = await apiClient.get<PagedResult<Department>>(
+            `${DEPARTMENT_ENDPOINT}/paged`,
+            { params: { page, pageSize } }
+        );
+        return response.data;
+    },
+
     // Get department by ID
     getById: async (id: number): Promise<Department> => {
         const response = await apiClient.get<Department>(`${DEPARTMENT_ENDPOINT}/${id}`);

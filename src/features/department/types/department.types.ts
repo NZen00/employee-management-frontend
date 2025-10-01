@@ -17,3 +17,11 @@ export interface UpdateDepartmentDto {
     departmentCode: string;
     departmentName: string;
 }
+
+export interface PagedResult<T> {
+    items: T[];
+    totalCount: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+}

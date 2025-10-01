@@ -8,27 +8,32 @@ import './DepartmentTable.scss';
 
 interface DepartmentTableProps {
     departments: Department[];
+    totalCount: number;
+    currentPage: number;
+    pageSize: number;
+    onPageChange: (page: number, pageSize: number) => void;
     onEdit: (department: Department) => void;
     onDelete: (id: number) => void;
 }
 
-const DepartmentTable = ({ departments, onEdit, onDelete }: DepartmentTableProps) => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-
-    // Pagination logic
-    const indexOfLastItem = currentPage * pageSize;
-    const indexOfFirstItem = indexOfLastItem - pageSize;
-    const currentItems = departments.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(departments.length / pageSize);
+const DepartmentTable = ({
+                             departments,
+                             totalCount,
+                             currentPage,
+                             pageSize,
+                             onPageChange,
+                             onEdit,
+                             onDelete
+                         }: DepartmentTableProps) => {
+    const totalPages = Math.ceil(totalCount / pageSize);
 
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
+        onPageChange(page, pageSize);
     };
 
     const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setPageSize(Number(e.target.value));
-        setCurrentPage(1);
+        const newSize = Number(e.target.value);
+        onPageChange(1, newSize);
     };
 
     const getPaginationItems = () => {
@@ -43,18 +48,17 @@ const DepartmentTable = ({ departments, onEdit, onDelete }: DepartmentTableProps
 
         for (let i = startPage; i <= endPage; i++) {
             items.push(
-                <Pagination.Item
-                    key={i}
-            active={i === currentPage}
-            onClick={() => handlePageChange(i)}
-        >
-            {i}
-            </Pagination.Item>
-        );
+                <Pagination.Item key={i} active={i === currentPage} onClick={() => handlePageChange(i)}>
+                    {i}
+                </Pagination.Item>
+            );
         }
 
         return items;
     };
+
+    const startIndex = (currentPage - 1) * pageSize + 1;
+    const endIndex = Math.min(currentPage * pageSize, totalCount);
 
     return (
         <div className="department-table-wrapper">
@@ -69,14 +73,14 @@ const DepartmentTable = ({ departments, onEdit, onDelete }: DepartmentTableProps
         </tr>
         </thead>
         <tbody>
-        {currentItems.length === 0 ? (
-                <tr>
-                    <td colSpan={4} className="text-center py-5 text-muted">
-                No departments found. Create your first department!
-                    </td>
-                </tr>
-) : (
-        currentItems.map((department) => (
+        {departments.length === 0 ? (
+            <tr>
+                <td colSpan={4} className="text-center py-5 text-muted">
+                    No departments found. Create your first department!
+                </td>
+            </tr>
+        ) : (
+            departments.map((department) => (
             <tr key={department.departmentId}>
             <td>
                 <span className="dept-code">{department.departmentCode}</span>
@@ -126,49 +130,32 @@ const DepartmentTable = ({ departments, onEdit, onDelete }: DepartmentTableProps
     </Table>
     </div>
 
-    {departments.length > 0 && (
-        <div className="table-footer">
-        <div className="page-size-selector">
-        <span className="me-2">Show</span>
-            <select
-        className="form-select form-select-sm"
-        value={pageSize}
-        onChange={handlePageSizeChange}
-        >
-        <option value={5}>5</option>
-            <option value={10}>10</option>
-        <option value={25}>25</option>
-        <option value={50}>50</option>
-        </select>
-        <span className="ms-2">entries</span>
-        </div>
+            {totalCount > 0 && (
+                <div className="table-footer">
+                    <div className="page-size-selector">
+                        <span className="me-2">Show</span>
+                        <select className="form-select form-select-sm" value={pageSize} onChange={handlePageSizeChange}>
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={25}>25</option>
+                            <option value={50}>50</option>
+                        </select>
+                        <span className="ms-2">entries</span>
+                    </div>
 
-        <div className="pagination-info">
-        Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, departments.length)} of{' '}
-        {departments.length} entries
-    </div>
+                    <div className="pagination-info">
+                        Showing {startIndex} to {endIndex} of {totalCount} entries
+                    </div>
 
-    <Pagination className="mb-0">
-    <Pagination.First
-        onClick={() => handlePageChange(1)}
-        disabled={currentPage === 1}
-        />
-        <Pagination.Prev
-        onClick={() => handlePageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        />
-        {getPaginationItems()}
-        <Pagination.Next
-            onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        />
-        <Pagination.Last
-        onClick={() => handlePageChange(totalPages)}
-        disabled={currentPage === totalPages}
-        />
-        </Pagination>
-        </div>
-    )}
+                    <Pagination className="mb-0">
+                        <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+                        <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                        {getPaginationItems()}
+                        <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
+                        <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
+                    </Pagination>
+                </div>
+            )}
     </div>
 );
 };
